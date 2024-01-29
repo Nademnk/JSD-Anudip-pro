@@ -17,7 +17,7 @@ public class StoreMdcnController {
 	@Autowired
 	StoreMdcnService sms;
 	
-	//get mapping to fetch all hotel 
+	//get mapping to fetch all Stores
 	@GetMapping("/getStoreMdcn")
 	public List<StoreMdcn> getStoreMdcn(){
 		return sms.fetchStoreMdcnDetails();

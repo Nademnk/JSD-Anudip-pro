@@ -14,43 +14,48 @@ import com.BlueChem.sbtp.entity.Customer;
 import com.BlueChem.sbtp.service.CustomerService;
 import jakarta.validation.Valid;
 
-
-
-	//handle all incoming request for entity customer
+//handle all incoming request for entity customer
 	@RestController
+	@CrossOrigin(origins="http://localhost:4200")
 	public class CustomerController {
 		
-		@Autowired
-		CustomerService cs;
+		@Autowired 
+		CustomerService customerService;
 		
-		//using post mapping to add customer details with http status created & code 201
-		@PostMapping("/regsiterCustomer")
-		//valid - will check all validation of customer entity during runtime
-		//request body - indicates method parameter should be bound to the body of the web request
-		public ResponseEntity<Customer> saveCustomer(@Valid @RequestBody Customer customer){
-			return new ResponseEntity<Customer>(cs.registerCustomer(customer),HttpStatus.CREATED);
-		}
 		
 		//using get mapping to fetch customer based in id with http status OK & code 200
-		@GetMapping("/fetchCustomer/{cId}")
+		@GetMapping("/fetchCustomer/{orderno}")
 		//pathVariable - indicates that a method parameter should be bound to a URI template variable
-		public ResponseEntity<Customer> fetchCustomer(@PathVariable("cId") int cId){
-			return new ResponseEntity<Customer>(cs.fetchCustomerDetail(cId), HttpStatus.OK);	
+		public ResponseEntity<Customer> fetchCustomer(@PathVariable("orderno") long orderno){
+			return new ResponseEntity<Customer>(customerService.fetchCustomerDetail(orderno), HttpStatus.OK);	
 		}
 		
 		//using delete mapping to remove customer based on id with 
-		@DeleteMapping("/deleteCustomer/{cId}")
-		public ResponseEntity<String> deleteCustomer(@PathVariable("cId") int cId){
-			cs.removeCustomer(cId);
+		@DeleteMapping("/deleteCustomer/{orderno}")
+		public ResponseEntity<String> deleteCustomer(@PathVariable("orderno") long orderno){
+			customerService.removeCustomer(orderno);
 			return new ResponseEntity<String>("Deleted Customer Record", HttpStatus.OK);
 		}
 		
-		@PutMapping("/editCustomer/{cId}")
-		public ResponseEntity<Customer> editCustomer(@Valid @PathVariable("cId") int cId,
+		@PutMapping("/editCustomer/{orderno}")
+		public ResponseEntity<Customer> editCustomer(@Valid @PathVariable("orderno") long orderno,
 				@RequestBody Customer customer){
-			return new ResponseEntity<Customer>(cs.editCustomer(customer, cId), HttpStatus.OK);
+			return new ResponseEntity<Customer>(customerService.editCustomer(customer, orderno), HttpStatus.OK);
 		}
-	
+	    
+		
+
+		@PostMapping("/register")
+		public Customer createCustomer(@RequestBody Customer customer)
+		{
+			return customerService.createCustomer(customer);
+		}
+		
+		
   }
+	
+
+
+	
 	
 
